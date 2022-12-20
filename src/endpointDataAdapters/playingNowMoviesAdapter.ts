@@ -1,4 +1,4 @@
-import { MovieProps } from "../components/organisms/MoviesList";
+import { MovieProps } from "../components/movie/MoviesList";
 import { posterBasePath } from "../constants";
 import { GenreList } from "../types";
 
@@ -26,12 +26,12 @@ const playingNowMoviesAdapter = (
 
   return {
     id: String(id),
-    poster: Boolean(poster_path) ? `${posterBasePath}${poster_path}` : null,
     title,
-    yearOfRelease: String(new Date(release_date).getFullYear()),
-    genres: genreNames,
-    voteAverage: vote_average,
     overview,
+    vote_average,
+    genres: genreNames,
+    release_date: String(new Date(release_date).getFullYear()),
+    poster_path: Boolean(poster_path) ? `${posterBasePath}${poster_path}` : null,
   };
 };
 

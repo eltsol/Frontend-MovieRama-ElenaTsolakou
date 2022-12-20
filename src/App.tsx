@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import theme from "./themes/theme";
+import { GenreList } from "./types";
+import { apiKey, baseUrl } from "./constants";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 
-//Components
-import Header from "./components/organisms/Header";
-import Footer from "./components/organisms/Footer";
-import SearchMovie from "./components/molecules/SearchMovie";
-import Section from "./components/organisms/Section";
-
-import MoviesList, { MovieProps } from "./components/organisms/MoviesList";
-import { apiKey, baseUrl } from "./constants";
+//Adapters
 import { playingNowMoviesAdapter } from "./endpointDataAdapters";
-import { GenreList } from "./types";
+
+//Components
+import Header from "./components/partials/Header";
+import Footer from "./components/partials/Footer";
+import Section from "./components/layout/Section";
+import SearchMovie from "./components/movie/SearchMovie";
+import MoviesList, { MovieProps } from "./components/movie/MoviesList";
+import { useHasScrolledToBottom } from "./hooks";
 
 export interface MoviesState {
   page: number;
@@ -21,32 +23,32 @@ export interface MoviesState {
 
 function App() {
   const [moviesInfos, setMoviesInfos] = useState<null | MoviesState>(null);
-  const [page, setPage] = useState(1);
+  const [isSearchByQuery, setIsSearchByQuery] = useState(false);
   const [genresList, setGenresList] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [loading, setIsLoading] = useState(false);
+  const [, setError] = useState(null);
 
+  //Get genre list
   const getGenreList = async () => {
-    setIsLoading(true);
     const response = await fetch(`${baseUrl}/genre/movie/list?api_key=${apiKey}&language=en-US`);
-    const data = await response.json();
-    setIsLoading(false);
-    setGenresList(data.genres);
+    const responseJson = await response.json();
+    setGenresList(responseJson.genres);
   };
 
+  //Get movies that play now
   const getMoviesPLayingNow = async (genresList: GenreList) => {
-    setIsLoading(true);
     const response = await fetch(
-      `${baseUrl}/movie/now_playing?api_key=${apiKey}&language=en-US&page=${page}`
+      `${baseUrl}/movie/now_playing?api_key=${apiKey}&language=en-US&page=${
+        moviesInfos ? moviesInfos.page : 1
+      }`
     );
-    const data = await response.json();
-    setIsLoading(false);
-    const transformedResultsData = data.results.map((result: any) =>
+    const responseJson = await response.json();
+    const transformedResultsData = responseJson.results.map((result: any) =>
       playingNowMoviesAdapter(result, genresList)
     );
     setMoviesInfos({
-      page: data.page,
-      totalPages: data.total_pages,
+      page: responseJson.page,
+      totalPages: responseJson.total_pages,
       movies: moviesInfos
         ? [...moviesInfos.movies, ...transformedResultsData]
         : transformedResultsData,
@@ -57,22 +59,32 @@ function App() {
     try {
       getGenreList();
     } catch (error: any) {
-      setIsLoading(false);
       setError(error);
     }
   }, []);
 
   useEffect(() => {
-    if (genresList) {
+    if (genresList && !moviesInfos) {
       try {
         getMoviesPLayingNow(genresList);
       } catch (error: any) {
-        setIsLoading(false);
         setError(error);
       }
     }
-  }, [genresList, page]);
+  }, [genresList]);
 
+  const { isAtBottom } = useHasScrolledToBottom();
+
+  useEffect(() => {
+    if (genresList && moviesInfos && isSearchByQuery === false) {
+      const shouldLoadMoreMovies = moviesInfos.page !== moviesInfos.totalPages;
+      if (isAtBottom && shouldLoadMoreMovies) {
+        getMoviesPLayingNow(genresList);
+      }
+    }
+  }, [moviesInfos, isAtBottom, isSearchByQuery]);
+
+  console.log(moviesInfos);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -83,8 +95,13 @@ function App() {
             <SearchMovie
               setIsLoading={setIsLoading}
               setError={setError}
+              setIsSearchByQuery={setIsSearchByQuery}
               setMoviesInfos={setMoviesInfos}
+              isUserAtBottom={isAtBottom}
               genresList={genresList}
+              isSearchByQuery={isSearchByQuery}
+              currentPage={moviesInfos && moviesInfos.page}
+              totalPages={moviesInfos && moviesInfos.totalPages}
             />
           )}
         </Section>
