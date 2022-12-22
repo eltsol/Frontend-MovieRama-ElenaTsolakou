@@ -1,3 +1,3 @@
 import moviesPlayingNowAdapter from "./moviesPlayingNowAdapter";
-
-export { moviesPlayingNowAdapter };
+import networkErrorThrower from './networkErrorThrower'
+export { moviesPlayingNowAdapter,networkErrorThrower };

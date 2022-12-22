@@ -17,6 +17,11 @@ const useStyles = makeStyles({
   card: {
     height: "100%",
     position: "relative",
+    backgroundColor: theme.palette.grey[900],
+    transition: "transform 0.15s ease-in-out",
+    "&:hover": {
+      transform: "scale3d(1.05, 1.05, 1)",
+    },
   },
   cardActionArea: {
     height: "100%",
@@ -88,17 +93,15 @@ const MovieCard: React.FC<MovieCardProps> = ({
   };
 
   return (
-    <Card className={styles.card}>
+    <Card className={styles.card} raised>
       <CardActionArea className={styles.cardActionArea} onClick={showMovieDetailsHandler}>
-        {poster_path && (
-          <CardMedia
-            title={title}
-            loading="lazy"
-            component="img"
-            image={poster_path}
-            className={styles.cardMedia}
-          />
-        )}
+        <CardMedia
+          title={title}
+          loading="lazy"
+          component="img"
+          image={poster_path ? poster_path : undefined}
+          className={styles.cardMedia}
+        />
         <CardContent className={styles.cardContent}>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item xs="auto">
@@ -109,7 +112,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
                   </Typography>
                 </Grid>
                 <Grid item xs="auto">
-                  <Typography variant="body1" color="textSecondary">
+                  <Typography variant="body1" color="textPrimary">
                     ({String(new Date(release_date).getFullYear())})
                   </Typography>
                 </Grid>

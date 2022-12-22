@@ -53,7 +53,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ title, subtitle, bgImage, chi
             {title}
           </Typography>
           {subtitle && (
-            <Typography color="primary" variant="h6" gutterBottom align="center">
+            <Typography color="primary" variant="h4" gutterBottom align="center">
               {subtitle}
             </Typography>
           )}

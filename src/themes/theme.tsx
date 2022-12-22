@@ -144,7 +144,7 @@ const theme = createTheme({
         "&:hover": {
           backgroundColor: alpha("#F5C518", 0.7),
         },
-        "&$focused": {
+        "&:focused": {
           backgroundColor: alpha("#F5C518", 0.6),
         },
       },
@@ -163,7 +163,7 @@ const theme = createTheme({
         "&:hover": {
           backgroundColor: alpha(colors.grey[800], 0.7),
         },
-        "&$focused": {
+        "&:focused": {
           backgroundColor: alpha(colors.grey[800], 0.6),
         },
       },

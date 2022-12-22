@@ -20,13 +20,13 @@ const Section: React.FC<PropsWithChildren<SectionProps>> = ({
     <Box pt={pt} pb={pb}>
       <Container maxWidth={maxWidth} disableGutters={maxWidth ? false : true}>
         {title && (
-          <Box pb={2}>
+          <Box pb={3}>
             <Typography variant="h4" color="primary">
               {title}
             </Typography>
           </Box>
         )}
-        <Box>{children}</Box>
+        {children}
       </Container>
     </Box>
   );
