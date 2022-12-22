@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { makeStyles, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import MovieCard from "./MovieCard";
 import MovieDetailsDialog from "./MovieDetailsDialog";
-
-const useStyles = makeStyles({});
-
 export interface MovieProps {
   id: string;
   title: string;

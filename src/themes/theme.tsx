@@ -1,4 +1,5 @@
 import { colors } from "@material-ui/core";
+import shape from "@material-ui/core/styles/shape";
 import { createTheme, alpha } from "@material-ui/core/styles";
 
 const theme = createTheme({
@@ -56,7 +57,7 @@ const theme = createTheme({
       letterSpacing: 0,
     },
     h4: {
-      fontSize: 35,
+      fontSize: 32,
       fontWeight: 500,
       lineHeight: "42px",
       letterSpacing: 0.00875,
@@ -111,10 +112,10 @@ const theme = createTheme({
     },
     button: {
       fontSize: 14,
-      fontWeight: 500,
+      fontWeight: 700,
       lineHeight: "16px",
       letterSpacing: 0.0175,
-      textTransform: "unset",
+      textTransform: "uppercase",
     },
   },
   //Declare Theme Shape where it's applicable
@@ -130,12 +131,42 @@ const theme = createTheme({
       color: "primary",
       size: "large",
       disableRipple: true,
-      disableElevation: true,
     },
   },
   //Overriding  Material UI props
   overrides: {
+    MuiButton: {
+      containedSizeLarge: {
+        height: 48,
+        padding: "0px 16px",
+        fontSize: "unset",
+        borderRadius: shape.borderRadius,
+        "&:hover": {
+          backgroundColor: alpha("#F5C518", 0.7),
+        },
+        "&$focused": {
+          backgroundColor: alpha("#F5C518", 0.6),
+        },
+      },
+      textSizeLarge: {
+        height: 48,
+        padding: "0px 16px",
+        fontSize: "unset",
+        borderRadius: shape.borderRadius,
+      },
+    },
     MuiFilledInput: {
+      root: {
+        borderTopRightRadius: "unset",
+        borderTopLeftRadius: "unset",
+        backgroundColor: colors.grey[800],
+        "&:hover": {
+          backgroundColor: alpha(colors.grey[800], 0.7),
+        },
+        "&$focused": {
+          backgroundColor: alpha(colors.grey[800], 0.6),
+        },
+      },
       input: {
         padding: 16,
       },
@@ -146,6 +177,13 @@ const theme = createTheme({
           "&:not(.MuiInputAdornment-hiddenLabel)": {
             marginTop: "unset",
           },
+        },
+      },
+    },
+    MuiCardContent: {
+      root: {
+        "&:last-child": {
+          paddingBottom: 16,
         },
       },
     },

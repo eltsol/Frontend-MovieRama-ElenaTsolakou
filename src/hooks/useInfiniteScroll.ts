@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-const useHasScrolledToBottom = () => {
+const useInfiniteScroll = () => {
   const [isAtBottom, setIsAtBottom] = useState(false);
 
-  const scrollHandler = () => {
+  const handleScroll = () => {
     document.addEventListener("scroll", () => {
       let documentHeight = document.body.scrollHeight;
       let currentScroll = window.scrollY + window.innerHeight;
@@ -17,11 +17,11 @@ const useHasScrolledToBottom = () => {
   };
 
   useEffect(() => {
-    document.addEventListener("DOMContentLoaded", scrollHandler);
-    return () => document.removeEventListener("DOMContentLoaded", scrollHandler);
+    document.addEventListener("DOMContentLoaded", handleScroll);
+    return () => document.removeEventListener("DOMContentLoaded", handleScroll);
   }, []);
 
   return { isAtBottom };
 };
 
-export { useHasScrolledToBottom };
+export default useInfiniteScroll;

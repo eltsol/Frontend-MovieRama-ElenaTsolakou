@@ -1,6 +1,6 @@
-import { makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import theme from "../../themes/theme";
+import { makeStyles, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   footer: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Footer = ({}) => {
+const Footer = () => {
   const styles = useStyles();
 
   return (

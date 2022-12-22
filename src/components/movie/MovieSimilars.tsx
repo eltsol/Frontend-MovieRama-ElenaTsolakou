@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import { MovieProps } from "./MoviesList";
-import { posterBasePath } from "../../constants";
+import { posterBasePath } from "../../utils/constants";
 import MovieCard, { MovieCardProps } from "./MovieCard";
 
 export interface MovieSimilarsProps {

@@ -1,11 +1,11 @@
 import React from "react";
-import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import { Theaters } from "@material-ui/icons";
+import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 
 const Header = () => {
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar variant="dense">
         <IconButton edge="start" color="inherit" aria-label="logo">
           <Theaters />
         </IconButton>

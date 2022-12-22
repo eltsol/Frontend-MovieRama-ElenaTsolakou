@@ -1,19 +1,19 @@
 import { MovieProps } from "../components/movie/MoviesList";
-import { posterBasePath } from "../constants";
-import { GenreList } from "../types";
+import { posterBasePath } from "./constants";
+import { GenreList } from "./types";
 
-export interface PlayingNowMovies {
+export interface MoviesPlayingNow {
   id: number;
-  poster_path: string | null;
   title: string;
-  release_date: string;
-  vote_average: number;
   overview: string;
   genre_ids: number[];
+  release_date: string;
+  vote_average: number;
+  poster_path: string | null;
 }
 
-const playingNowMoviesAdapter = (
-  { id, poster_path, title, release_date, vote_average, overview, genre_ids }: PlayingNowMovies,
+const moviesPlayingNowAdapter = (
+  { id, poster_path, title, release_date, vote_average, overview, genre_ids }: MoviesPlayingNow,
   genreList: GenreList
 ): MovieProps => {
   let genreNames: string[] = [];
@@ -35,4 +35,4 @@ const playingNowMoviesAdapter = (
   };
 };
 
-export default playingNowMoviesAdapter;
+export default moviesPlayingNowAdapter;

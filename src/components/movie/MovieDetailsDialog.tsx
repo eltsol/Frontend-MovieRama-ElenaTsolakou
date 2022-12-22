@@ -4,68 +4,78 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Slide,
   Tabs,
   Tab,
   Box,
+  IconButton,
+  Typography,
 } from "@material-ui/core";
-import { TransitionProps } from "@material-ui/core/transitions";
-import { apiKey, baseUrl } from "../../constants";
-import MovieReviews from "./MovieReviews";
 import theme from "../../themes/theme";
-import MovieSimilars from "./MovieSimilars";
+import { apiKey, baseUrl } from "../../utils/constants";
+import { Close } from "@material-ui/icons";
 import { MovieProps } from "./MoviesList";
 import MovieTrailers from "./MovieTrailers";
+import MovieReviews from "./MovieReviews";
+import MovieSimilars from "./MovieSimilars";
+import Transition from "../partials/Transition";
 
 const useStyles = makeStyles(() => ({
   tabContent: {
     padding: theme.spacing(4, 0),
   },
+  dialogTitle: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 }));
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & { children?: React.ReactElement<any, any> },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 export interface MovieDetailsDialogProps {
   openDialog: boolean;
   setOpenDialog: (openDialog: boolean) => void;
-  selectedMovie: null | MovieProps;
+  selectedMovie: MovieProps | null;
 }
 
 const MovieDetailsDialog: React.FC<MovieDetailsDialogProps> = ({
-  openDialog = false,
+  openDialog,
   setOpenDialog,
   selectedMovie,
 }) => {
   const styles = useStyles();
-  const [tabValue, setTabValue] = useState(0);
   const [videos, setVideos] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [similars, setSimilars] = useState(null);
+  const [tabValue, setTabValue] = useState(0);
+
+  //Tab change handler
+  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
+    setTabValue(newValue);
+  };
+
+  //Dialog close handler
+  const handleClose = () => {
+    setOpenDialog(!openDialog);
+  };
 
   //Get movie videos
   const getMovieVideos = async (id: string) => {
     const response = await fetch(`${baseUrl}/movie/${id}/videos?api_key=${apiKey}&language=en-US`);
-    const responseJson = await response.json();
-    setVideos(responseJson.results);
+    const data = await response.json();
+    setVideos(data.results);
   };
 
-  //Get movie reviews
+  //Get movie reviews up to 2
   const getMovieReviews = async (id: string) => {
     const response = await fetch(`${baseUrl}/movie/${id}/reviews?api_key=${apiKey}&language=en-US`);
-    const responseJson = await response.json();
-    setReviews(responseJson.results.slice(0, 2));
+    const data = await response.json();
+    setReviews(data.results.slice(0, 2));
   };
 
   //Get similar movies
   const getMovieSimilars = async (id: string) => {
     const response = await fetch(`${baseUrl}/movie/${id}/similar?api_key=${apiKey}&language=en-US`);
-    const responseJson = await response.json();
-    setSimilars(responseJson.results);
+    const data = await response.json();
+    setSimilars(data.results);
   };
 
   useEffect(() => {
@@ -80,38 +90,27 @@ const MovieDetailsDialog: React.FC<MovieDetailsDialogProps> = ({
     }
   }, [selectedMovie, tabValue]);
 
-  //Tab content for each tab
-  const tabContent = [
-    <MovieTrailers videos={videos} />,
-    <MovieReviews reviews={reviews} />,
-    <MovieSimilars similars={similars} />,
-  ];
-
-  //Tab change handler
-  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
-    setTabValue(newValue);
-  };
-
-  //Dialog close handler
-  const handleClose = () => {
-    setOpenDialog(!openDialog);
-  };
-
   return (
     <Dialog
+      fullWidth
       maxWidth="md"
       open={openDialog}
       onClose={handleClose}
       TransitionComponent={Transition}
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description">
-      <DialogTitle id="alert-dialog-slide-title">{"Movie Title"}</DialogTitle>
+      <DialogTitle id="alert-dialog-slide-title" disableTypography className={styles.dialogTitle}>
+        {selectedMovie && <Typography variant="h6">{selectedMovie.title}</Typography>}
+        <IconButton aria-label="close" onClick={handleClose}>
+          <Close />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
         <Tabs
           value={tabValue}
+          variant="fullWidth"
           textColor="primary"
           indicatorColor="primary"
-          variant="fullWidth"
           onChange={handleChange}>
           <Tab label="Trailers" />
           <Tab label="Reviews" />

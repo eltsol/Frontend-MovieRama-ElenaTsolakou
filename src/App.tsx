@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import theme from "./themes/theme";
-import { GenreList } from "./types";
-import { apiKey, baseUrl } from "./constants";
+import { GenreList } from "./utils/types";
+import { apiKey, baseUrl } from "./utils/constants";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 
 //Adapters
-import { playingNowMoviesAdapter } from "./endpointDataAdapters";
+import { moviesPlayingNowAdapter } from "./utils";
+
+//Custom hooks
+import useInfiniteScroll from "./hooks/useInfiniteScroll";
 
 //Components
+import Loader from "./components/partials/Loader";
 import Header from "./components/partials/Header";
 import Footer from "./components/partials/Footer";
 import Section from "./components/layout/Section";
-import SearchMovie from "./components/movie/SearchMovie";
+import Search from "./components/partials/Search";
 import MoviesList, { MovieProps } from "./components/movie/MoviesList";
-import { useHasScrolledToBottom } from "./hooks";
 
 export interface MoviesState {
   page: number;
@@ -22,36 +25,38 @@ export interface MoviesState {
 }
 
 function App() {
-  const [moviesInfos, setMoviesInfos] = useState<null | MoviesState>(null);
-  const [isSearchByQuery, setIsSearchByQuery] = useState(false);
+  const [moviesInfo, setMoviesInfo] = useState<MoviesState | null>(null);
+  const [isSearchByQuery, setIsSearchByQuery] = useState(true);
   const [genresList, setGenresList] = useState(null);
-  const [loading, setIsLoading] = useState(false);
-  const [, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  //Get genre list
+  //Get genres of the movie
   const getGenreList = async () => {
+    setIsLoading(true);
     const response = await fetch(`${baseUrl}/genre/movie/list?api_key=${apiKey}&language=en-US`);
-    const responseJson = await response.json();
-    setGenresList(responseJson.genres);
+    const data = await response.json();
+    setIsLoading(false);
+    setGenresList(data.genres);
   };
 
   //Get movies that play now
   const getMoviesPLayingNow = async (genresList: GenreList) => {
+    setIsLoading(true);
     const response = await fetch(
       `${baseUrl}/movie/now_playing?api_key=${apiKey}&language=en-US&page=${
-        moviesInfos ? moviesInfos.page : 1
+        moviesInfo ? moviesInfo.page : 1
       }`
     );
-    const responseJson = await response.json();
-    const transformedResultsData = responseJson.results.map((result: any) =>
-      playingNowMoviesAdapter(result, genresList)
+    const data = await response.json();
+    setIsLoading(false);
+    const moviesPlayingNow = data.results.map((result: any) =>
+      moviesPlayingNowAdapter(result, genresList)
     );
-    setMoviesInfos({
-      page: responseJson.page,
-      totalPages: responseJson.total_pages,
-      movies: moviesInfos
-        ? [...moviesInfos.movies, ...transformedResultsData]
-        : transformedResultsData,
+    setMoviesInfo({
+      page: data.page,
+      totalPages: data.total_pages,
+      movies: moviesInfo ? [...moviesInfo.movies, ...moviesPlayingNow] : moviesPlayingNow,
     });
   };
 
@@ -60,53 +65,60 @@ function App() {
       getGenreList();
     } catch (error: any) {
       setError(error);
+      setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    if (genresList && !moviesInfos) {
+    if (genresList && !moviesInfo) {
       try {
         getMoviesPLayingNow(genresList);
       } catch (error: any) {
         setError(error);
+        setIsLoading(false);
       }
     }
   }, [genresList]);
 
-  const { isAtBottom } = useHasScrolledToBottom();
+  const { isAtBottom } = useInfiniteScroll();
 
   useEffect(() => {
-    if (genresList && moviesInfos && isSearchByQuery === false) {
-      const shouldLoadMoreMovies = moviesInfos.page !== moviesInfos.totalPages;
+    if (genresList && moviesInfo && isSearchByQuery === false) {
+      const shouldLoadMoreMovies = moviesInfo.page !== moviesInfo.totalPages;
       if (isAtBottom && shouldLoadMoreMovies) {
         getMoviesPLayingNow(genresList);
       }
     }
-  }, [moviesInfos, isAtBottom, isSearchByQuery]);
+  }, [moviesInfo, isAtBottom, isSearchByQuery]);
 
-  console.log(moviesInfos);
+  console.log(moviesInfo);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
       <main>
-        <Section title="Search Movies" maxWidth="lg" paddingY={8}>
+        <Section pb={8}>
           {genresList && (
-            <SearchMovie
-              setIsLoading={setIsLoading}
+            <Search
               setError={setError}
-              setIsSearchByQuery={setIsSearchByQuery}
-              setMoviesInfos={setMoviesInfos}
-              isUserAtBottom={isAtBottom}
               genresList={genresList}
+              setIsLoading={setIsLoading}
+              isUserAtBottom={isAtBottom}
+              setMoviesInfo={setMoviesInfo}
               isSearchByQuery={isSearchByQuery}
-              currentPage={moviesInfos && moviesInfos.page}
-              totalPages={moviesInfos && moviesInfos.totalPages}
+              setIsSearchByQuery={setIsSearchByQuery}
+              currentPage={moviesInfo && moviesInfo.page}
+              totalPages={moviesInfo && moviesInfo.totalPages}
             />
           )}
         </Section>
-        <Section title="Now Playing Movies" maxWidth="lg">
-          <MoviesList movies={moviesInfos ? moviesInfos.movies : moviesInfos} />
+        {/* {!isLoading ? (
+         
+        ) : (
+          <Loader isLoading={isLoading} setIsLoading={setIsLoading} />
+        )} */}
+        <Section title="Now Playing" maxWidth="lg" pb={10}>
+          <MoviesList movies={moviesInfo ? moviesInfo.movies : moviesInfo} />
         </Section>
       </main>
       <Footer />

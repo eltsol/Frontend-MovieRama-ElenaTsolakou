@@ -16,9 +16,16 @@ import { MovieProps } from "./MoviesList";
 const useStyles = makeStyles({
   card: {
     height: "100%",
+    position: "relative",
+  },
+  cardActionArea: {
+    height: "100%",
   },
   cardMedia: {
     aspectRatio: 2 / 3,
+  },
+  cardContent: {
+    height: "100%",
   },
   title: {
     maxWidth: 230,
@@ -82,21 +89,27 @@ const MovieCard: React.FC<MovieCardProps> = ({
 
   return (
     <Card className={styles.card}>
-      <CardActionArea onClick={showMovieDetailsHandler}>
+      <CardActionArea className={styles.cardActionArea} onClick={showMovieDetailsHandler}>
         {poster_path && (
-          <CardMedia className={styles.cardMedia} image={poster_path} title={title} />
+          <CardMedia
+            title={title}
+            loading="lazy"
+            component="img"
+            image={poster_path}
+            className={styles.cardMedia}
+          />
         )}
-        <CardContent>
+        <CardContent className={styles.cardContent}>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item xs="auto">
               <Grid container spacing={1}>
                 <Grid item xs="auto">
-                  <Typography variant="h6" className={styles.title} title={title}>
+                  <Typography variant="body1" className={styles.title} title={title}>
                     {title}
                   </Typography>
                 </Grid>
                 <Grid item xs="auto">
-                  <Typography variant="h6" color="textSecondary">
+                  <Typography variant="body1" color="textSecondary">
                     ({String(new Date(release_date).getFullYear())})
                   </Typography>
                 </Grid>
@@ -104,7 +117,12 @@ const MovieCard: React.FC<MovieCardProps> = ({
             </Grid>
             <Grid item xs="auto">
               <Box position="relative" display="inline-flex">
-                <CircularProgress variant="determinate" color="primary" value={vote_average * 10} />
+                <CircularProgress
+                  variant="determinate"
+                  color="primary"
+                  value={vote_average * 10}
+                  title={`Average vote of the ${title} is ${vote_average}`}
+                />
                 <Box
                   top={0}
                   left={0}
