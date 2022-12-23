@@ -100,7 +100,11 @@ const MovieDetailsDialog: React.FC<MovieDetailsDialogProps> = ({
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description">
       <DialogTitle id="alert-dialog-slide-title" disableTypography className={styles.dialogTitle}>
-        {selectedMovie && <Typography variant="h6">{selectedMovie.title}</Typography>}
+        {selectedMovie && (
+          <Typography variant="h6">
+            {`${selectedMovie.title} (${selectedMovie.release_date})`}
+          </Typography>
+        )}
         <IconButton aria-label="close" onClick={handleClose}>
           <Close />
         </IconButton>

@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import theme from "./themes/theme";
 import { GenreList } from "./utils/types";
+
 import { apiKey, baseUrl } from "./utils/constants";
-import Alert from "@material-ui/lab/Alert";
-import { CssBaseline, Snackbar, ThemeProvider, Typography } from "@material-ui/core";
+import { CssBaseline, ThemeProvider } from "@material-ui/core";
 
 //Adapters
 import { moviesPlayingNowAdapter, networkErrorThrower } from "./utils";
@@ -18,6 +18,8 @@ import Section from "./components/layout/Section";
 import Search from "./components/partials/Search";
 import MoviesList, { MovieProps } from "./components/movie/MoviesList";
 import Loader from "./components/partials/Loader";
+import Error from "./components/partials/Error";
+import SnackbarError from "./components/partials/SnackbarError";
 
 export interface MoviesState {
   page: number;
@@ -33,10 +35,6 @@ function App() {
   const [error, setError] = useState<null | { statusCode: number; message: string }>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [genresList, setGenresList] = useState(null);
-
-  const onCloseSnackbar = () => {
-    setError(null);
-  };
 
   //Get genres of the movie
   const getGenreList = async () => {
@@ -65,7 +63,7 @@ function App() {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `${baseUrl}/movie/now_playing?api_key=${apiKey}&language=en-US&page=${page}`
+        `${baseUrl}/movie/now_playing?api_key=sdfv${apiKey}&language=en-US&page=${page}`
       );
       const data = await response.json();
       if (data && data.results) {
@@ -153,22 +151,24 @@ function App() {
           title={category === "playingNowMovies" ? "Now Playing" : "Search Results"}
           maxWidth="lg"
           pb={10}>
-          {moviesToRender && moviesToRender.length > 0 ? (
+          {moviesToRender && moviesToRender.length > 0 && !error ? (
             <MoviesList movies={moviesToRender} isLoading={isLoading} />
           ) : (
-            <Typography>No movies</Typography>
+            <Error
+              title="No results found."
+              subtitle="Please try searching by actor, genre or character."
+            />
           )}
         </Section>
         {isLoading && <Loader isLoading={isLoading} />}
         {error && (
-          <Snackbar open={!!error} onClose={onCloseSnackbar}>
-            <>
-              <Alert onClose={onCloseSnackbar} severity="error">
-                {error.message}
-                {error.statusCode}
-              </Alert>
-            </>
-          </Snackbar>
+          <SnackbarError
+            error={{
+              status_message: error.message,
+              status_code: error.statusCode,
+            }}
+            setError={setError}
+          />
         )}
       </main>
       <Footer />

@@ -1,6 +1,7 @@
 import { colors } from "@material-ui/core";
 import shape from "@material-ui/core/styles/shape";
 import { createTheme, alpha } from "@material-ui/core/styles";
+import { text } from "node:stream/consumers";
 
 const theme = createTheme({
   //Declare Theme Palette
@@ -17,13 +18,13 @@ const theme = createTheme({
       light: "#6f74ff",
     },
     warning: {
-      main: "#EF8E00",
+      main: "#D2D755",
     },
     success: {
-      main: "#00897B",
+      main: "#9ECA6A",
     },
     error: {
-      main: "#A7004B",
+      main: "#F15D22",
     },
     info: {
       main: "#5E35B1",
@@ -133,13 +134,12 @@ const theme = createTheme({
       disableRipple: true,
     },
   },
-  //Overriding  Material UI props
+  //Overriding  Material UI styles
   overrides: {
     MuiButton: {
       containedSizeLarge: {
         height: 48,
         padding: "0px 16px",
-        fontSize: "unset",
         borderRadius: shape.borderRadius,
         "&:hover": {
           backgroundColor: alpha("#F5C518", 0.7),
