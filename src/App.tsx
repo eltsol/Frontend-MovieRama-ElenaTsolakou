@@ -63,7 +63,7 @@ function App() {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `${baseUrl}/movie/now_playing?api_key=sdfv${apiKey}&language=en-US&page=${page}`
+        `${baseUrl}/movie/now_playing?api_key=${apiKey}&language=en-US&page=${page}`
       );
       const data = await response.json();
       if (data && data.results) {
