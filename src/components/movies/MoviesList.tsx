@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Grid, Typography } from "@material-ui/core";
-import MovieCard from "./MovieCard";
-import MovieDetailsDialog from "./MovieDetailsDialog";
-import Loader from "../partials/Loader";
+import { Grid } from "@material-ui/core";
+import MovieCard from "./movie/MovieCard";
+import MovieDetailsDialog from "./movie/MovieDetailsDialog";
 export interface MovieProps {
   id: string;
   title: string;

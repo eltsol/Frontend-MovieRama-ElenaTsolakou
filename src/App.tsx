@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import theme from "./themes/theme";
 import { GenreList } from "./utils/types";
-
 import { apiKey, baseUrl } from "./utils/constants";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 
@@ -16,9 +15,9 @@ import Header from "./components/partials/Header";
 import Footer from "./components/partials/Footer";
 import Section from "./components/layout/Section";
 import Search from "./components/partials/Search";
-import MoviesList, { MovieProps } from "./components/movie/MoviesList";
+import MoviesList, { MovieProps } from "./components/movies/MoviesList";
 import Loader from "./components/partials/Loader";
-import Error from "./components/partials/Error";
+import Error from "./components/partials/ErrorMessage";
 import SnackbarError from "./components/partials/SnackbarError";
 
 export interface MoviesState {
@@ -116,6 +115,7 @@ function App() {
     }
   }, [page]);
 
+  //Show movies according to action
   const moviesToRender = useMemo(() => {
     if (seardchedMovies) {
       setCategory("searchedMovies");

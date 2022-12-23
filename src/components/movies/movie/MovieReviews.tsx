@@ -1,7 +1,7 @@
 import React from "react";
-import theme from "../../themes/theme";
-import CardWrapper from "../layout/CardWrapper";
-import { posterBasePath } from "../../utils/constants";
+import theme from "../../../themes/theme";
+import CardWrapper from "../../layout/CardWrapper";
+import { posterBasePath } from "../../../utils/constants";
 import { makeStyles, Grid, Typography, Avatar, Box } from "@material-ui/core";
 
 const useStyles = makeStyles({

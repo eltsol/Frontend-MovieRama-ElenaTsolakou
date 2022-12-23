@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, IconButton, InputAdornment, TextField } from "@material-ui/core";
 import { Close, SearchOutlined } from "@material-ui/icons";
-import { apiKey, baseUrl } from "../../utils/constants";
+import { Button, Grid, IconButton, InputAdornment, TextField } from "@material-ui/core";
 import { MoviesState } from "../../App";
-import { moviesPlayingNowAdapter, networkErrorThrower } from "../../utils";
 import { GenreList } from "../../utils/types";
-import HeroSection from "./HeroSection";
+import HeroSection from "../layout/HeroSection";
+import { apiKey, baseUrl } from "../../utils/constants";
+import { moviesPlayingNowAdapter, networkErrorThrower } from "../../utils";
 
 //Assets
 import hero from "../../assets/images/hero.jpg";

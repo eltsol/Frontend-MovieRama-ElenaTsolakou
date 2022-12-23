@@ -1,11 +1,9 @@
 import React, { PropsWithChildren } from "react";
 import { Container, ContainerProps, Box, Typography } from "@material-ui/core";
-import { SpacingOptions } from "@material-ui/core/styles/createSpacing";
-
 export interface SectionProps {
-  title?: string;
   pt?: number;
   pb?: number;
+  title?: string;
   maxWidth?: ContainerProps["maxWidth"];
 }
 

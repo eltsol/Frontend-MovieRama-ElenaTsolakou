@@ -1,4 +1,4 @@
-import { MovieProps } from "../components/movie/MoviesList";
+import { MovieProps } from "../components/movies/MoviesList";
 import { posterBasePath } from "./constants";
 import { GenreList } from "./types";
 

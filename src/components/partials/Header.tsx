@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
-        <IconButton edge="start" color="inherit" aria-label="logo">
+        <IconButton edge="start" color="inherit" aria-label="MovieRama Logo">
           <Theaters />
         </IconButton>
         <Typography variant="h6">MovieRama</Typography>

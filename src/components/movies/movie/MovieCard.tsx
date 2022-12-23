@@ -10,8 +10,8 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import theme from "../../themes/theme";
-import { MovieProps } from "./MoviesList";
+import theme from "../../../themes/theme";
+import { MovieProps } from "../MoviesList";
 
 const useStyles = makeStyles({
   card: {
@@ -99,8 +99,8 @@ const MovieCard: React.FC<MovieCardProps> = ({
           title={title}
           loading="lazy"
           component="img"
-          image={poster_path ? poster_path : undefined}
           className={styles.cardMedia}
+          image={poster_path ? poster_path : undefined}
         />
         <CardContent className={styles.cardContent}>
           <Grid container alignItems="center" justifyContent="space-between">

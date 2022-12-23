@@ -10,14 +10,14 @@ import {
   IconButton,
   Typography,
 } from "@material-ui/core";
-import theme from "../../themes/theme";
-import { apiKey, baseUrl } from "../../utils/constants";
+import theme from "../../../themes/theme";
+import { apiKey, baseUrl } from "../../../utils/constants";
 import { Close } from "@material-ui/icons";
-import { MovieProps } from "./MoviesList";
+import { MovieProps } from "../MoviesList";
 import MovieTrailers from "./MovieTrailers";
 import MovieReviews from "./MovieReviews";
 import MovieSimilars from "./MovieSimilars";
-import Transition from "../partials/Transition";
+import Transition from "../../partials/Transition";
 
 const useStyles = makeStyles(() => ({
   tabContent: {

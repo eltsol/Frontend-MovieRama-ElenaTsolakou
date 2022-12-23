@@ -5,20 +5,20 @@ import { alpha, Box, Container, makeStyles, Paper, Typography } from "@material-
 const useStyles = makeStyles(() => ({
   paper: {
     minHeight: 400,
+    position: "relative",
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    position: "relative",
     "&:before": {
       content: "''",
       position: "absolute",
-      left: 0,
-      right: 0,
       top: 0,
       bottom: 0,
+      left: 0,
+      right: 0,
       backgroundColor: alpha(theme.palette.common.black, 0.5),
     },
   },
@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface HeroSectionProps {
-  title?: string;
+  title: string;
   subtitle?: string;
   bgImage?: string;
   children: any;

@@ -1,9 +1,9 @@
 import React from "react";
-import { Card, CardContent, makeStyles } from "@material-ui/core";
 import theme from "../../themes/theme";
+import { Card, CardContent, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
-  card: {
+  cardDark: {
     height: "100%",
     backgroundColor: theme.palette.grey[800],
   },
@@ -22,7 +22,7 @@ const CardWrapper: React.FC<CardWrapperProps> = ({ children, bgColor = "dark" })
   const styles = useStyles();
 
   return (
-    <Card variant="elevation" className={bgColor === "dark" ? styles.card : styles.cardLight}>
+    <Card variant="elevation" className={bgColor === "dark" ? styles.cardDark : styles.cardLight}>
       <CardContent>{children}</CardContent>
     </Card>
   );
